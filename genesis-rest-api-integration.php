@@ -88,6 +88,8 @@ function genesis_rest_api_integration_prepare_post( $data, $post, $request ) {
 	do_action( 'genesis_after_endwhile' );
 	$genesis_after_endwhile = ob_get_clean();
 
+	// By default we return only fields that have output, but this filter
+	// allows the option to return all fields even if they are empty. 
 	$return_empty = apply_filters( 'genesis_rest_api_return_empty_hooks', false );
 
 	// Only return hooks that have output.
