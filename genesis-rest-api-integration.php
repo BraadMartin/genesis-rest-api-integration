@@ -2,21 +2,21 @@
 /**
  * Genesis REST API Integration
  *
- * @package 			Genesis_REST_API_Integration
- * @author				Braad Martin <wordpress@braadmartin.com>
- * @license 			GPL-2.0+
+ * @package             Genesis_REST_API_Integration
+ * @author              Braad Martin <wordpress@braadmartin.com>
+ * @license             GPL-2.0+
  *
  * @wordpress-plugin
- * Plugin Name: 		Genesis REST API Integration
- * Plugin URI: 			https://wordpress.org/plugins/genesis-rest-api-integration/
- * Description: 		Adds any content output from the Genesis Framework hooks to the post object response when using the WP REST API v2.
- * Version: 			1.0.0
- * Author:				Braad Martin
- * Author URI: 			http://braadmartin.com
- * License: 			GPL-2.0+
- * License URI: 		http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain: 		genesis-rest-api-integration
- * Domain Path: 		/languages
+ * Plugin Name:         Genesis REST API Integration
+ * Plugin URI:          https://wordpress.org/plugins/genesis-rest-api-integration/
+ * Description:         Adds any content output from the Genesis Framework hooks to the post object response when using the WP REST API v2.
+ * Version:             1.0.0
+ * Author:              Braad Martin
+ * Author URI:          http://braadmartin.com
+ * License:             GPL-2.0+
+ * License URI:         http://www.gnu.org/licenses/gpl-2.0.txt
+ * Text Domain:         genesis-rest-api-integration
+ * Domain Path:         /languages
  */
 
 define( 'GENESIS_REST_API_INTEGRATION_VERSION', '1.0.0' );
