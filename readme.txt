@@ -8,7 +8,7 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Adds content output from the Genesis Framework hooks to the post object response when using the WP REST API v2.
+Adds content output from the Genesis Framework hooks to the response data for posts, pages, and custom post types when using the WP REST API v2.
 
 == Description ==
 
