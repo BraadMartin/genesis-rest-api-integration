@@ -21,11 +21,49 @@
 
 define( 'GENESIS_REST_API_INTEGRATION_VERSION', '1.0.0' );
 
-add_filter( 'rest_prepare_post', 'genesis_rest_api_integration_prepare_post', 10, 3 );
+add_action( 'init', 'genesis_rest_api_integration_init', 20 );
+/**
+ * Set up the the rest_prepare_{$post_type} filters that we'll use to add
+ * content to the post object response.
+ *
+ * @since  1.0.0
+ */
+function genesis_rest_api_integration_init() {
+
+	// Get an array of all the registered custom post types.
+	$args = array(
+		'public'   => true,
+		'_builtin' => true,
+	);
+
+	$post_types = get_post_types( $args, 'names', 'and' ); 
+
+	// Allow the array of post types to be filtered.
+	$post_types = apply_filters( 'genesis_rest_api_supported_post_types', $post_types );
+
+	// Loop over each post type and register the rest api filter.
+	foreach ( $post_types as $post_type ) {
+
+		// Ensure the post type name is correctly formatted.
+		$post_type = str_replace( '-', '_', str_replace( ' ', '_', $post_type ) );
+
+		add_filter( 'rest_prepare_' . $post_type, 'genesis_rest_api_integration_prepare_post', 10, 3 );
+	}
+}
+
 /**
  * Add any output from the Genesis loop hooks to the post object response.
+ *
+ * @since  1.0.0
+ *
+ * @param  object  $data     The post object response data.
+ * @param  object  $post     The post object.
+ * @param  object  $request  The request object.
  */
 function genesis_rest_api_integration_prepare_post( $data, $post, $request ) {
+
+	// Store the post object.
+	$post_object = $post;
 
 	// These are necessary to set the context for the genesis loop.
 	global $post;
@@ -40,7 +78,11 @@ function genesis_rest_api_integration_prepare_post( $data, $post, $request ) {
 	}
 
 	// Do the query.
-	$query = new WP_Query( 'p=' . $post_id );
+	if ( 'page' == $post_object->post_type ) {
+		$query = new WP_Query( 'page_id=' . $post_id );
+	} else {
+		$query = new WP_Query( 'p=' . $post_id );
+	}
 
 	// Bail if the query didn't return a post.
 	if ( ! $query->have_posts() ) {
@@ -48,7 +90,7 @@ function genesis_rest_api_integration_prepare_post( $data, $post, $request ) {
 	}
 
 	// Set the $post and $wp_query globals.
-	$post = $query->post;
+	$post = $post_object;
 	$wp_query = $query;
 
 	// Do the full genesis loop (the equivalent of all the hooks that would
