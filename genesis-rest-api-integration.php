@@ -9,7 +9,7 @@
  * @wordpress-plugin
  * Plugin Name:         Genesis REST API Integration
  * Plugin URI:          https://wordpress.org/plugins/genesis-rest-api-integration/
- * Description:         Adds content output from the Genesis Framework hooks to the post object response when using the WP REST API v2.
+ * Description:         Adds content output from the Genesis Framework hooks to the response data for posts, pages, and custom post types when using the WP REST API v2.
  * Version:             1.0.0
  * Author:              Braad Martin
  * Author URI:          http://braadmartin.com
@@ -47,20 +47,22 @@ function genesis_rest_api_integration_init() {
 		// Ensure the post type name is correctly formatted.
 		$post_type = str_replace( '-', '_', str_replace( ' ', '_', $post_type ) );
 
-		add_filter( 'rest_prepare_' . $post_type, 'genesis_rest_api_integration_prepare_post', 10, 3 );
+		add_filter( 'rest_prepare_' . $post_type, 'genesis_rest_api_integration_add_post_data', 10, 3 );
 	}
 }
 
 /**
- * Add any output from the Genesis loop hooks to the post object response.
+ * Add any output from the Genesis hooks to the response data.
  *
  * @since  1.0.0
  *
- * @param  object  $data     The post object response data.
- * @param  object  $post     The post object.
- * @param  object  $request  The request object.
+ * @param   object  $data     The post object response data.
+ * @param   object  $post     The post object.
+ * @param   object  $request  The request object.
+ *
+ * @return  object  $data     The response data.
  */
-function genesis_rest_api_integration_prepare_post( $data, $post, $request ) {
+function genesis_rest_api_integration_add_post_data( $data, $post, $request ) {
 
 	// Store the post object.
 	$post_object = $post;
