@@ -16,6 +16,8 @@ If your site uses the Genesis framework, it's likely that you're making using of
 
 This plugin filters the response from the API to include any content added via Genesis hooks. It adds this content to the post object response, which means you don't have to do a separate request or modify your request to get the data. Simply ask for a post in the standard way like /wp-json/wp/v2/posts/1 and you'll get the extra content from the Genesis hooks.
 
+[Example diff showing the response with and without the plugin active](https://www.diffchecker.com/v9ttyrq7)
+
 The Genesis hook content that is returned is generated with respect to the context of the specific post being retrieved. The context will match what it would be on the single post page for the given post, page, or custom post type. This means that if you've got some code like this:
 
 	add_action( 'genesis_before_entry', 'mytheme_output_special_content' );
