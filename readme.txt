@@ -3,7 +3,7 @@ Contributors: Braad
 Donate link: http://braadmartin.com/
 Tags: genesis, rest, api, integration, framework, post, object, response
 Requires at least: 4.0
-Tested up to: 4.2.3
+Tested up to: 4.3
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -47,7 +47,6 @@ Here's the full list of all the Genesis hooks that are currently supported:
 
 	genesis_before
 	genesis_before_header
-	genesis_header
 	genesis_site_title
 	genesis_site_description
 	genesis_header_right
@@ -55,7 +54,6 @@ Here's the full list of all the Genesis hooks that are currently supported:
 	genesis_before_content_sidebar_wrap
 	genesis_before_content
 	genesis_before_loop
-	genesis_loop
 	genesis_before_while
 	genesis_before_entry
 	genesis_entry_header
@@ -88,6 +86,7 @@ And naturally, there is a filter to control which hooks are supported:
 		return $genesis_hooks;
 	}
 
+**NOTE:** The hooks genesis_header and genesis_loop are not included by default because they mostly call other hooks that are included, but you can always add them back in using the genesis_rest_api_supported_hooks filter.
 
 **NOTE:** Returning formatted HTML over the REST API is not the best way to make use of a REST API to build a website. It would be preferable to return only the raw object data and build all of your HTML on the client side using the object data. The best use case for this plugin is probably for existing websites that were built using Genesis and already have a bunch of content on Genesis hooks, but if you're starting fresh you might consider building a deeper integration with the WP REST API so that you can keep formatted HTML out of the response data.
 

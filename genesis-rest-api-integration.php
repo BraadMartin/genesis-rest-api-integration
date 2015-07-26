@@ -54,7 +54,7 @@ function genesis_rest_api_integration_init() {
 /**
  * Add any output from the Genesis hooks to the response data.
  *
- * @since  1.0.0
+ * @since   1.0.0
  *
  * @param   object  $data     The post object response data.
  * @param   object  $post     The post object.
@@ -99,7 +99,6 @@ function genesis_rest_api_integration_add_post_data( $data, $post, $request ) {
 	$genesis_hooks = array(
 		'genesis_before',
 		'genesis_before_header',
-		'genesis_header',
 		'genesis_site_title',
 		'genesis_site_description',
 		'genesis_header_right',
@@ -107,7 +106,6 @@ function genesis_rest_api_integration_add_post_data( $data, $post, $request ) {
 		'genesis_before_content_sidebar_wrap',
 		'genesis_before_content',
 		'genesis_before_loop',
-		'genesis_loop',
 		'genesis_before_while',
 		'genesis_before_entry',
 		'genesis_entry_header',
