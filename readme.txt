@@ -22,7 +22,7 @@ The Genesis hook content that is returned is generated with respect to the conte
 	function mytheme_output_special_content() {
 		// Only on posts in a specific category
 		if ( in_category( '5' ) ) {
-			echo 'Some Content'; 
+			echo 'Some Content';
 		}
 	}
 
@@ -42,6 +42,52 @@ By default this plugin adds the extra properties to posts, pages, and all custom
 
 		return $post_types;
 	}
+
+Here's the full list of all the Genesis hooks that are currently supported:
+
+	genesis_before
+	genesis_before_header
+	genesis_header
+	genesis_site_title
+	genesis_site_description
+	genesis_header_right
+	genesis_after_header
+	genesis_before_content_sidebar_wrap
+	genesis_before_content
+	genesis_before_loop
+	genesis_loop
+	genesis_before_while
+	genesis_before_entry
+	genesis_entry_header
+	genesis_before_entry_content
+	genesis_entry_content
+	genesis_after_entry_content
+	genesis_entry_footer
+	genesis_after_entry
+	genesis_after_endwhile
+	genesis_after_loop
+	genesis_before_sidebar_widget_area
+	genesis_after_sidebar_widget_area
+	genesis_after_content_sidebar_wrap
+	genesis_before_footer
+	genesis_footer
+	genesis_after_footer
+	genesis_after
+
+And naturally, there is a filter to control which hooks are supported:
+
+	add_filter( 'genesis_rest_api_supported_hooks', 'mytheme_genesis_rest_api_supported_hooks' );
+	function mytheme_genesis_rest_api_supported_hooks( $genesis_hooks ) {
+
+		// Only include certian hooks.
+		$genesis_hooks = array(
+			'genesis_before_entry',
+			'genesis_after_entry',
+		);
+
+		return $genesis_hooks;
+	}
+
 
 **NOTE:** Returning formatted HTML over the REST API is not the best way to make use of a REST API to build a website. It would be preferable to return only the raw object data and build all of your HTML on the client side using the object data. The best use case for this plugin is probably for existing websites that were built using Genesis and already have a bunch of content on Genesis hooks, but if you're starting fresh you might consider building a deeper integration with the WP REST API so that you can keep formatted HTML out of the response data.
 
