@@ -9,7 +9,7 @@
  * @wordpress-plugin
  * Plugin Name:         Genesis REST API Integration
  * Plugin URI:          https://wordpress.org/plugins/genesis-rest-api-integration/
- * Description:         Adds content output from the Genesis Framework hooks to the response data for posts, pages, and custom post types when using the WP REST API v2.
+ * Description:         Adds content output from the Genesis framework hooks to the response data for posts, pages, and custom post types when using the WP REST API v2.
  * Version:             1.0.0
  * Author:              Braad Martin
  * Author URI:          http://braadmartin.com
