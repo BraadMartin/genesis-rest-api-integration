@@ -12,7 +12,7 @@ Adds content output from the Genesis Framework hooks to the response data for po
 
 == Description ==
 
-If your site uses the Genesis framework, it's likely that you're making using of Genesis hooks like genesis_before_content or genesis_entry_footer. When using the WP REST API any content that has been added to these hooks is not included in the respose by default.
+If your site uses the Genesis framework, it's likely that you're making use of Genesis hooks like genesis_before_content or genesis_entry_footer. When using the WP REST API any content that has been added to these hooks is not included in the respose by default.
 
 This plugin filters the response from the API to include any content added via Genesis hooks. It adds this content to the post object response, which means you don't have to do a separate request or modify your request to get the data. Simply ask for a post in the standard way like /wp-json/wp/v2/posts/1 and you'll get the extra content from the Genesis hooks.
 
