@@ -30,24 +30,42 @@ add_action( 'init', 'genesis_rest_api_integration_init', 20 );
  */
 function genesis_rest_api_integration_init() {
 
+    global $wp_post_types;
+
 	// Get an array of all the registered custom post types.
 	$args = array(
 		'public'   => true,
-		'_builtin' => true,
+		'_builtin' => false,
 	);
 
-	$post_types = get_post_types( $args, 'names', 'and' );
+	$post_types = get_post_types( $args, 'objects', 'and' );
+
+	// Manually add back in posts and pages.
+	$post_types['post'] = get_post_type_object( 'post' );
+	$post_types['page'] = get_post_type_object( 'page' );
 
 	// Allow the array of post types to be filtered.
 	$post_types = apply_filters( 'genesis_rest_api_supported_post_types', $post_types );
 
-	// Loop over each post type and register the rest api filter.
+	// Allow the choice of registering api support for CPTs in this plugin.
+	$register_cpt_api_support = apply_filters( 'genesis_rest_api_register_cpt_api_support', true );
+
+	// Loop over each post type and register support for the api and the rest api filter.
 	foreach ( $post_types as $post_type ) {
 
-		// Ensure the post type name is correctly formatted.
-		$post_type = str_replace( '-', '_', str_replace( ' ', '_', $post_type ) );
+		// Only register support for the API on custom post types.
+		// Support for the default post types is already there.
+		if ( $register_cpt_api_support && 'post' !== $post_type->name && 'page' !== $post_type->name ) {
 
-		add_filter( 'rest_prepare_' . $post_type, 'genesis_rest_api_integration_add_post_data', 10, 3 );
+			$wp_post_types[ $post_type->name ]->show_in_rest = true;
+			$wp_post_types[ $post_type->name ]->rest_base = $post_type->name;
+			$wp_post_types[ $post_type->name ]->rest_controller_class = 'WP_REST_Posts_Controller';
+		}
+
+		// Ensure the post type name is correctly formatted.
+		$post_type_name = str_replace( ' ', '_', $post_type->name );
+
+		add_filter( 'rest_prepare_' . $post_type_name, 'genesis_rest_api_integration_add_post_data', 10, 3 );
 	}
 }
 
@@ -83,7 +101,7 @@ function genesis_rest_api_integration_add_post_data( $data, $post, $request ) {
 	if ( 'page' == $post_object->post_type ) {
 		$query = new WP_Query( 'page_id=' . $post_id );
 	} else {
-		$query = new WP_Query( 'p=' . $post_id );
+		$query = new WP_Query( 'p=' . $post_id . '&&post_type=' . $post_object->post_type );
 	}
 
 	// Bail if the query didn't return a post.
