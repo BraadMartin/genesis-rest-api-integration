@@ -4,7 +4,7 @@ Donate link: http://braadmartin.com/
 Tags: genesis, rest, api, integration, framework, post, object, response
 Requires at least: 4.0
 Tested up to: 4.3
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -155,10 +155,20 @@ The WP REST API includes a filter on the response data it returns, and this plug
 
 == Changelog ==
 
+= 1.1.0 =
+* Added better support for working with custom post types
+* Now you can register basic CPT support for the REST API using a filter
+* Switched the primary initialization hook to rest_api_init
+
 = 1.0.0 =
 * First Release
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+* Added better support for working with custom post types
+* Now you can register basic CPT support for the REST API using a filter
+* Switched the primary initialization hook to rest_api_init
 
 = 1.0.0 =
 * First Release
