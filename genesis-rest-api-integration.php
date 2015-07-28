@@ -98,7 +98,7 @@ function genesis_rest_api_integration_add_post_data( $data, $post, $request ) {
 	if ( 'page' == $post_object->post_type ) {
 		$query = new WP_Query( 'page_id=' . $post_id );
 	} else {
-		$query = new WP_Query( 'p=' . $post_id . '&&post_type=' . $post_object->post_type );
+		$query = new WP_Query( 'p=' . $post_id . '&post_type=' . $post_object->post_type );
 	}
 
 	// Bail if the query didn't return a post.
