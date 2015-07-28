@@ -12,7 +12,7 @@ Adds content output from the Genesis framework hooks to the response data for po
 
 == Description ==
 
-If your site uses the Genesis framework, it's likely that you're making use of Genesis hooks like genesis_before_content or genesis_entry_footer. When using the WP REST API any content that has been added to these hooks is not included in the respose by default.
+If your site uses the Genesis framework, it's likely that you're making use of Genesis hooks like genesis_before_content or genesis_entry_footer. When using the WP REST API, any content that has been added to these hooks is not included in the respose by default.
 
 This plugin filters the response from the API to include any content added via Genesis hooks. It adds this content to the post object response, which means you don't have to do a separate request or modify your request to get the data. Simply ask for a post in the standard way like /wp-json/wp/v2/posts/1 and you'll get the extra content from the Genesis hooks.
 
@@ -43,6 +43,20 @@ By default this plugin adds the extra properties to posts, pages, and all custom
 		$post_types = array( 'movie' );
 
 		return $post_types;
+	}
+
+**NOTE:** In v2 of the REST API, custom post types need to have the extra properties `show_in_rest`, `rest_base`, and `rest_controller_class` set on their post type objects in order for the API to start serving data for them. I've included a filter in this plugin for adding these properties so that you can declare REST API support for CPTs and add the extra Genesis data in one step, but the filter is off by default and won't override properties that are already set (because if core doesn't assume you want all your CPTs publicly accessible by default, I don't think I should either). To turn this functionality on, use the included filter like this:
+
+	add_filter( 'genesis_rest_api_register_cpt_api_support', '__return_true' );
+
+If you do this, you're CPTs will be available at routes that match the official name of the post type found on the post type object, so if your post type is 'movie' and you have a movie with an id of 8, the movie will be accessible at /wp-json/v2/movie/8. It's probably a better idea to match the core convention of /posts/ and /pages/, so if you want to make the route available at /movies/ instead of /movie/ you just need to specifically set the `rest_base` property like so:
+
+	add_action( 'rest_api_init', 'mytheme_change_cpt_routes', -1 );
+	function mytheme_change_cpt_routes() {
+
+		global $wp_post_types;
+
+		$wp_post_types['movie']->rest_base = 'movies';
 	}
 
 Here's the full list of all the Genesis hooks that are currently supported:
@@ -90,7 +104,34 @@ And naturally, there is a filter to control which hooks are supported:
 
 **NOTE:** The hooks genesis_header and genesis_loop are not included by default because they mostly call other hooks that are included, but you can always add them back in using the genesis_rest_api_supported_hooks filter.
 
-**NOTE:** Returning formatted HTML over the REST API is not the best way to make use of a REST API to build a website. It would be preferable to return only the raw object data and build all of your HTML on the client side using the object data. The best use case for this plugin is probably for existing websites that were built using Genesis and already have a bunch of content on Genesis hooks, but if you're starting fresh you might consider building a deeper integration with the WP REST API so that you can keep formatted HTML out of the response data.
+**NOTE:** Returning formatted HTML over the REST API is not the best way to make use of a REST API to build a website. It would be preferable to return only the raw object data and build all of your HTML on the client side using the object data. With this plugin you can do exactly this with a little help from `json_encode`:
+
+	add_action( 'genesis_before_entry_content', 'mytheme_pass_array' );
+	function mytheme_pass_array() {
+
+		if ( is_single( 124 ) ) {
+			$json = array(
+				'a_key' => 'some value',
+				'another_key' => 'another value',
+			);
+			echo json_encode( $json );
+		}
+	}
+
+Or the object version:
+
+	add_action( 'genesis_after_entry_content', 'mytheme_pass_object' );
+	function mytheme_pass_object() {
+
+		if ( in_category( 2 ) ) {
+			$json = new stdClass();
+			$json->some_key = 'some value';
+			$json->another_key = 'another value';
+			echo json_encode( $json );
+		}
+	}
+
+Passing arbitrary objects and arrays like this really opens up some interesting possibilities.
 
 If you have any ideas for new features or find a bug, please open an issue [on Github](https://github.com/BraadMartin/genesis-rest-api-integration "Genesis REST API Integration"). Pull requests are also encouraged :).
 

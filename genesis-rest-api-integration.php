@@ -56,9 +56,17 @@ function genesis_rest_api_integration_init() {
 
 		// Only register support for the API on custom post types if specified.
 		if ( $register_cpt_api_support && 'post' !== $post_type_object->name && 'page' !== $post_type_object->name ) {
-			$wp_post_types[ $post_type_object->name ]->show_in_rest = true;
-			$wp_post_types[ $post_type_object->name ]->rest_base = $post_type_object->name;
-			$wp_post_types[ $post_type_object->name ]->rest_controller_class = 'WP_REST_Posts_Controller';
+
+			// Only set these properties if they are not already set.
+			if ( ! isset( $wp_post_types[ $post_type_object->name ]->show_in_rest ) ) {
+				$wp_post_types[ $post_type_object->name ]->show_in_rest = true;
+			}
+			if ( ! isset( $wp_post_types[ $post_type_object->name ]->rest_base ) ) {
+				$wp_post_types[ $post_type_object->name ]->rest_base = $post_type_object->name;
+			}
+			if ( ! isset( $wp_post_types[ $post_type_object->name ]->rest_controller_class ) ) {
+				$wp_post_types[ $post_type_object->name ]->rest_controller_class = 'WP_REST_Posts_Controller';
+			}
 		}
 
 		add_filter( 'rest_prepare_' . $post_type_object->name, 'genesis_rest_api_integration_add_post_data', 10, 3 );
