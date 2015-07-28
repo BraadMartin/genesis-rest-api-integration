@@ -21,7 +21,7 @@
 
 define( 'GENESIS_REST_API_INTEGRATION_VERSION', '1.0.0' );
 
-add_action( 'init', 'genesis_rest_api_integration_init', 20 );
+add_action( 'rest_api_init', 'genesis_rest_api_integration_init', 0 );
 /**
  * Set up the the rest_prepare_{$post_type} filters that we'll use to add
  * content to the post object response.
@@ -44,13 +44,13 @@ function genesis_rest_api_integration_init() {
 	$post_types['post'] = get_post_type_object( 'post' );
 	$post_types['page'] = get_post_type_object( 'page' );
 
-	// Allow the array of post types to be filtered.
+	// Allow the array of post type objects to be filtered.
 	$post_types = apply_filters( 'genesis_rest_api_supported_post_types', $post_types );
 
-	// Allow the choice of registering api support for CPTs in this plugin.
-	$register_cpt_api_support = apply_filters( 'genesis_rest_api_register_cpt_api_support', true );
+	// Allow the choice of also registering API support for CPTs with this plugin.
+	$register_cpt_api_support = apply_filters( 'genesis_rest_api_register_cpt_api_support', false );
 
-	// Loop over each post type and register support for the api and the rest api filter.
+	// Loop over each post type, register support for the API, and add the response filter.
 	foreach ( $post_types as $post_type ) {
 
 		// Only register support for the API on custom post types.
@@ -62,10 +62,7 @@ function genesis_rest_api_integration_init() {
 			$wp_post_types[ $post_type->name ]->rest_controller_class = 'WP_REST_Posts_Controller';
 		}
 
-		// Ensure the post type name is correctly formatted.
-		$post_type_name = str_replace( ' ', '_', $post_type->name );
-
-		add_filter( 'rest_prepare_' . $post_type_name, 'genesis_rest_api_integration_add_post_data', 10, 3 );
+		add_filter( 'rest_prepare_' . $post_type->name, 'genesis_rest_api_integration_add_post_data', 10, 3 );
 	}
 }
 
