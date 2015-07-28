@@ -51,7 +51,7 @@ By default this plugin adds the extra properties to posts, pages, and all custom
 
 If you do this, you're CPTs will be available at routes that match the official name of the post type found on the post type object, so if your post type is 'movie' and you have a movie with an id of 8, the movie will be accessible at /wp-json/v2/movie/8. It's probably a better idea to match the core convention of /posts/ and /pages/, so if you want to make the route available at /movies/ instead of /movie/ you just need to specifically set the `rest_base` property like so:
 
-	add_action( 'rest_api_init', 'mytheme_change_cpt_routes', -1 );
+	add_action( 'init', 'mytheme_change_cpt_routes', 11 );
 	function mytheme_change_cpt_routes() {
 
 		global $wp_post_types;
