@@ -37,12 +37,11 @@ function genesis_rest_api_integration_init() {
 		'public'   => true,
 		'_builtin' => false,
 	);
-
-	$post_types = get_post_types( $args, 'objects', 'and' );
+	$post_types = get_post_types( $args, 'names', 'and' );
 
 	// Manually add back in posts and pages.
-	$post_types['post'] = get_post_type_object( 'post' );
-	$post_types['page'] = get_post_type_object( 'page' );
+	$post_types[] = 'post';
+	$post_types[] = 'page';
 
 	// Allow the array of post type objects to be filtered.
 	$post_types = apply_filters( 'genesis_rest_api_supported_post_types', $post_types );
@@ -53,16 +52,16 @@ function genesis_rest_api_integration_init() {
 	// Loop over each post type, register support for the API, and add the response filter.
 	foreach ( $post_types as $post_type ) {
 
-		// Only register support for the API on custom post types.
-		// Support for the default post types is already there.
-		if ( $register_cpt_api_support && 'post' !== $post_type->name && 'page' !== $post_type->name ) {
+		$post_type_object = get_post_type_object( $post_type );
 
-			$wp_post_types[ $post_type->name ]->show_in_rest = true;
-			$wp_post_types[ $post_type->name ]->rest_base = $post_type->name;
-			$wp_post_types[ $post_type->name ]->rest_controller_class = 'WP_REST_Posts_Controller';
+		// Only register support for the API on custom post types if specified.
+		if ( $register_cpt_api_support && 'post' !== $post_type_object->name && 'page' !== $post_type_object->name ) {
+			$wp_post_types[ $post_type_object->name ]->show_in_rest = true;
+			$wp_post_types[ $post_type_object->name ]->rest_base = $post_type_object->name;
+			$wp_post_types[ $post_type_object->name ]->rest_controller_class = 'WP_REST_Posts_Controller';
 		}
 
-		add_filter( 'rest_prepare_' . $post_type->name, 'genesis_rest_api_integration_add_post_data', 10, 3 );
+		add_filter( 'rest_prepare_' . $post_type_object->name, 'genesis_rest_api_integration_add_post_data', 10, 3 );
 	}
 }
 
