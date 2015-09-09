@@ -1,12 +1,12 @@
 # Genesis REST API Integration #
-**Contributors:** Braad
-**Donate link:** http://braadmartin.com/
-**Tags:** genesis, rest, api, integration, framework, post, object, response
-**Requires at least:** 4.0
-**Tested up to:** 4.3
-**Stable tag:** 1.1.0
-**License:** GPLv2 or later
-**License URI:** http://www.gnu.org/licenses/gpl-2.0.html
+**Contributors:** Braad  
+**Donate link:** http://braadmartin.com/  
+**Tags:** genesis, rest, api, integration, framework, post, object, response  
+**Requires at least:** 4.0  
+**Tested up to:** 4.3  
+**Stable tag:** 1.1.0  
+**License:** GPLv2 or later  
+**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
 Adds content output from the Genesis framework hooks to the response data for posts, pages, and custom post types when using the WP REST API v2.
 
